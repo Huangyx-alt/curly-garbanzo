@@ -1,0 +1,42 @@
+--auto generate by C# editor: Tools/自动生成AssetList.lua脚本
+local AssetList = {}
+local this = AssetList
+------------------asset map,key to assetbundle_name-----------------
+----------------------------Assets\Bundles\Modules------------------------------------------
+this.GiftPackLetemRollBuffView = "modules/letemroll/inhotmodule/abprefab/giftpackletemrollbuffview"
+this.LetemRollBingoView = "modules/letemroll/inhotmodule/abprefab/letemrollbingoview"
+this.LetemRollHallView = "modules/letemroll/inhotmodule/abprefab/letemrollhallview"
+this.LetemRollHelpView = "modules/letemroll/inhotmodule/abprefab/letemrollhelpview"
+this.LetemRollJackpot = "modules/letemroll/inhotmodule/abprefab/letemrolljackpot"
+this.LetemRollReadyView = "modules/letemroll/inhotmodule/abprefab/letemrollreadyview"
+this.LetemRollSettleView = "modules/letemroll/inhotmodule/abprefab/letemrollsettleview"
+this.Play33HallBackground = "modules/letemroll/inhotmodule/abprefab/play33hallbackground"
+this.play33zhandou = "modules/letemroll/inhotmodule/abprefab/play33zhandou"
+this.FunctionIcon = "modules/letemroll/inhotmodule/abprefab/pass/functionicon"
+this.PassHelperView = "modules/letemroll/inhotmodule/abprefab/pass/passhelperview"
+this.PassPurchaseView = "modules/letemroll/inhotmodule/abprefab/pass/passpurchaseview"
+this.PassReceivedView = "modules/letemroll/inhotmodule/abprefab/pass/passreceivedview"
+this.PassRewardView = "modules/letemroll/inhotmodule/abprefab/pass/passrewardview"
+this.PassShowTipView = "modules/letemroll/inhotmodule/abprefab/pass/passshowtipview"
+this.PassTaskView = "modules/letemroll/inhotmodule/abprefab/pass/passtaskview"
+this.PassView = "modules/letemroll/inhotmodule/abprefab/pass/passview"
+this.Rewarditem = "modules/letemroll/inhotmodule/abprefab/pass/rewarditem"
+this.GoldRushDlpBg = "modules/letemroll/inhotmodule/texture/abtexture/goldrushdlpbg"
+this.GreenLPBG = "modules/letemroll/inhotmodule/texture/abtexture/greenlpbg"
+this.SceneLetemRoll = "modules/letemroll/inhotmodule/scene/sceneletemroll"
+this.LetemRollBingobingo = "modules/letemroll/inhotmodule/effect/abprefab/letemrollbingobingo"
+this.LetemRollEmpty = "modules/letemroll/inhotmodule/effect/abprefab/letemrollempty"
+this.LetemRollgetxiaoka = "modules/letemroll/inhotmodule/effect/abprefab/letemrollgetxiaoka"
+this.LetemRollSettlebingo = "modules/letemroll/inhotmodule/effect/abprefab/letemrollsettlebingo"
+this.LetemRollSettlebingoclown = "modules/letemroll/inhotmodule/effect/abprefab/letemrollsettlebingoclown"
+this.LetemRollskill1 = "modules/letemroll/inhotmodule/effect/abprefab/letemrollskill1"
+this.LetemRollfang = "modules/letemroll/inhotmodule/effect/materials/letemrollfang"
+this.LetemRollfangkuai02 = "modules/letemroll/inhotmodule/effect/materials/letemrollfangkuai02"
+this.GiftPackLetemRollBuffAtlas = "modules/letemroll/inhotmodule/atlas/giftpackletemrollbuffatlas"
+this.LetemRollBingoAtlas = "modules/letemroll/inhotmodule/atlas/letemrollbingoatlas"
+this.LetemRollHallAtlas = "modules/letemroll/inhotmodule/atlas/letemrollhallatlas"
+this.LetemRollPassTaskAtlas = "modules/letemroll/inhotmodule/atlas/letemrollpasstaskatlas"
+this.LetemRollPopupAtlas = "modules/letemroll/inhotmodule/atlas/letemrollpopupatlas"
+this.LetemRollPurchaseAtlas = "modules/letemroll/inhotmodule/atlas/letemrollpurchaseatlas"
+
+return this

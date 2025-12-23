@@ -1,0 +1,221 @@
+
+local RouletteModel = BaseModel:New("RouletteModel")
+local this = RouletteModel
+
+local rouletteInfo;
+local claimResultInfo;
+local spinResultInfo;
+
+local cacheRouletteInfo;
+local cacheRouletteConfigId;
+
+local m_callback = nil
+
+function RouletteModel:InitData()
+
+end
+
+function RouletteModel:SetLoginData(data)
+
+end
+
+function RouletteModel:GetRouletteInfo()
+    return spinResultInfo
+        or rouletteInfo
+        or claimResultInfo
+end
+
+
+function RouletteModel:GetEnterRouletteInfo()
+    return rouletteInfo
+            or spinResultInfo
+            or claimResultInfo
+end
+
+function RouletteModel:IsRouletteUnlock()
+    local openlevel = Csv.GetLevelOpenByType(0,7)
+    local myLevel = ModelList.PlayerInfoModel:GetLevel()
+    return myLevel >= openlevel
+end
+
+function RouletteModel:IsRouletteRewardAvailable()
+    if spinResultInfo and spinResultInfo.rouletteConfId then
+        return true
+    end
+    return false
+end
+
+function RouletteModel:IsRouletteFreeAvailable()
+    local roulette = this:GetRouletteInfo()
+    if roulette then
+        local price = nil
+        if roulette.rouletteConfId[1] then
+            price = Csv.GetData("roulette",roulette.rouletteConfId[1],"price")
+        end
+        if price == 0 then
+            return roulette.nextTime - os.time() <= 0
+        else
+            return false    
+        end
+    end
+end
+
+function RouletteModel:IsFeeAvailable(isEnable)
+    local roulette = this:GetRouletteInfo()
+    if isEnable then roulette = this:GetEnterRouletteInfo() end
+    if roulette then
+        local price = 0
+        if roulette.rouletteConfId[1] then
+            price = Csv.GetData("roulette",roulette.rouletteConfId[1],"price")
+        end
+        return price ~= 0
+    end
+end
+
+function RouletteModel:GetCurConfigId(index)
+    local roulette = this:GetRouletteInfo()
+    if roulette then
+        return roulette.rouletteConfId[index or 1]
+    end
+end
+
+function RouletteModel:GetCacheConfigId(index)
+    if cacheRouletteInfo then
+        return cacheRouletteInfo.rouletteConfId[index or 1]
+    end
+    return this:GetPreviousConfigId(index)
+end
+
+function RouletteModel:GetPreviousConfigId(index)
+    if spinResultInfo then
+        return spinResultInfo.rouletteConfId[index or 1]
+    end
+end
+
+function RouletteModel:GetRecordId()
+    if spinResultInfo then
+        return math.max(spinResultInfo.recordId,1)
+    end
+    return 1
+end
+
+function RouletteModel:GetRewardIndex(index)
+    if spinResultInfo then
+        return spinResultInfo.rewardId[index or 1]
+    end
+    return nil
+end
+
+function RouletteModel:GetRewardList()
+    if spinResultInfo then
+        return spinResultInfo.rewardId
+    end
+    return nil
+end
+
+function RouletteModel:GetRewardData(index)
+    if spinResultInfo then
+        return spinResultInfo.reward[index or 1]
+    end
+    return nil
+end
+
+function RouletteModel:GetRemainTime()
+    if rouletteInfo then
+        return math.max(0,rouletteInfo.nextTime - os.time())
+    end
+    return 0
+end
+
+function RouletteModel:ResetRouletteInfo()
+    rouletteInfo = nil
+    spinResultInfo = nil
+    cacheRouletteInfo = nil
+    cacheRouletteConfigId = nil
+    this.C2S_RequestRouletteInfo()
+end
+
+function RouletteModel.C2S_RequestRouletteInfo(callback)
+    m_callback = callback
+    this.SendMessage(MSG_ID.MSG_ROULETTE_MAIN,{})
+end
+
+function RouletteModel.Login_C2S_RequestRouletteInfo(callback)
+    m_callback = callback
+    return MSG_ID.MSG_ROULETTE_MAIN,Base64.encode(Proto.encode(MSG_ID.MSG_ROULETTE_MAIN,{}))
+    --this.SendMessage(MSG_ID.MSG_ROULETTE_MAIN,{})
+end
+
+function RouletteModel.S2C_ResphoneRouletteInfo(code,data)
+    if code == RET.RET_SUCCESS and data then
+        if data.code == 0 then
+            rouletteInfo = deep_copy(data)
+            --log.r("================================>>S2C_ResphoneRouletteInfo " .. rouletteInfo.rouletteConfId[1] .. "     " .. rouletteInfo.nextTime .. "     " .. os.time())
+            Facade.SendNotification(NotifyName.Roulette.RefreshRoulette)
+        end
+        if m_callback then
+            m_callback()
+            m_callback = nil
+        end
+    end
+end
+
+function RouletteModel.C2S_RequestSpinRoulette(rouletteConfId)
+    cacheRouletteInfo = this:GetRouletteInfo()
+    cacheRouletteConfigId = rouletteConfId
+    this.SendMessage(MSG_ID.MSG_ROULETTE_START,{rouletteConfId = rouletteConfId})
+end
+
+function RouletteModel.S2C_ResphoneSpinRoulette(code,data)
+    if code == RET.RET_SUCCESS and data then
+        if  data.rewardId and #data.rewardId>0 then
+            spinResultInfo = {recordId = data.recordId,rouletteConfId = data.rouletteConfId,rewardId = data.rewardId,reward = data.reward,nextTime = data.nextTime}
+        end 
+        Facade.SendNotification(NotifyName.Roulette.SpinRouletteResult)
+    else --出现异常情况时，转盘会卡死 直接退出
+        log.r("server return error errorr")
+        Facade.SendNotification(NotifyName.Roulette.ExitRoulette,true)
+    end
+end
+
+function RouletteModel.C2S_RequestClaimRouletteReward()
+    local recordId = this:GetRecordId()
+    rouletteInfo = nil
+    this.SendMessage(MSG_ID.MSG_ROULETTE_RECEIVE,{recordId = recordId})
+end
+
+function RouletteModel.C2S_RequestSpinRouletteFee(rouletteConfId)
+    cacheRouletteInfo = this:GetRouletteInfo()
+    cacheRouletteConfigId = rouletteConfId
+    ModelList.MainShopModel.C2S_RequestActivityPay(rouletteConfId,"roulette")
+end
+
+function RouletteModel.S2C_ResphoneClaimRouletteReward(code,data)
+    if code == RET.RET_SUCCESS and data then
+        if data.code == 0 then
+            claimResultInfo = spinResultInfo
+            --rouletteInfo.rouletteConfId = spinResultInfo.rouletteConfId
+            --rouletteInfo.nextTime = spinResultInfo.nextTime
+        end
+        spinResultInfo = nil
+        Facade.SendNotification(NotifyName.Roulette.ClaimRewardResult)
+    elseif code == RET.RET_ACTIVITY_REWARD_INVALID then
+        Facade.SendNotification(NotifyName.Roulette.ClaimRewardResult)
+    end
+end
+
+function RouletteModel.S2C_PushRouletteRewardInfo(code,data)
+    if code == RET.RET_SUCCESS and data then
+        spinResultInfo = deep_copy(data)
+    end
+end
+
+this.MsgIdList = 
+{
+    {msgid = MSG_ID.MSG_ROULETTE_MAIN,func = this.S2C_ResphoneRouletteInfo},
+    {msgid = MSG_ID.MSG_ROULETTE_START,func = this.S2C_ResphoneSpinRoulette},
+    {msgid = MSG_ID.MSG_ROULETTE_RECEIVE,func = this.S2C_ResphoneClaimRouletteReward},
+    {msgid = MSG_ID.MSG_ROULETTE_REWARD,func = this.S2C_PushRouletteRewardInfo},
+}
+
+return this

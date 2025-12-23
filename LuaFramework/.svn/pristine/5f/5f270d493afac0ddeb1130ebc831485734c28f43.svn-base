@@ -1,0 +1,35 @@
+--
+--TestView = BaseView:New("TestView")
+--local this = TestView
+--this.ViewType = CanvasSortingOrderManager.LayerType.Machine_Dialog
+--
+--this.auto_bind_ui_items = {
+--    "btn_test"
+--}
+--
+--function TestView:Awake()
+--    this:on_init()
+--end
+--
+--function TestView:OnEnable()
+--
+--end
+--
+--function TestView:on_close()
+--end
+--
+--function TestView:OnDestroy()
+--end
+--
+--function TestView:OnDisable()
+--end
+--
+--function TestView:on_btn_test_click()
+--    LoadScene("Test",ViewList.SceneLoadingHomeView,true)
+--end
+--
+--this.NotifyList = {
+--
+--}
+--
+--return this

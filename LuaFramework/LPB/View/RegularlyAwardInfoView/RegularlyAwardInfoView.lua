@@ -1,0 +1,347 @@
+--
+--require "View/CommonView/WatchADUtility"
+--
+--local RegularlyAwardInfoBaseState = require "State/RegularlyAwardInfoView/RegularlyAwardInfoBaseState"
+--local RegularlyAwardInfoOriginalState = require "State/RegularlyAwardInfoView/RegularlyAwardInfoOriginalState"
+--local RegularlyAwardInfoEnterState = require "State/RegularlyAwardInfoView/RegularlyAwardInfoEnterState"
+--local RegularlyAwardInfoExitState = require "State/RegularlyAwardInfoView/RegularlyAwardInfoExitState"
+--local RegularlyClaimRewardState = require "State/RegularlyAwardInfoView/RegularlyClaimRewardState"
+--local RegularlyAwardWctchVideoState = require "State/RegularlyAwardInfoView/RegularlyAwardWctchVideoState"
+--
+--RegularlyAwardInfoView = BaseView:New("RegularlyAwardInfoView","RegularlyAwardAtlas")
+--local this = RegularlyAwardInfoView
+--this.viewType = CanvasSortingOrderManager.LayerType.TopConsole
+--
+--local click_num = nil
+--
+--local _watchADUtility = WatchADUtility:New(AD_EVENTS.AD_EVENTS_OFFLINE_NOT_IN_CD)
+--
+--this.auto_bind_ui_items = {
+--    "btn_close",
+--    "btn_claim",
+--    "btn_watchVideo",
+--    "icon_head",
+--    "icon_coin",
+--    "icon_coin2",
+--    "text_level",
+--    "text_curBonus",
+--    "text_nextBonus",
+--    "text_emetald",
+--    "text_viplevel",
+--    "text_extra_gold",
+--    "text_extra_diamon",
+--    "anima",
+--    "img_vip_cion",
+--    "icon_watch",
+--    "icon_gems",
+--    "text_gems",
+--    "text_append",
+--    "video_effect",
+--    "text_video"
+--}
+--
+--function RegularlyAwardInfoView:OpenView(callback)
+--    Facade.SendNotification(NotifyName.ShowUI,this,function()
+--        if callback then
+--            callback()
+--        end
+--    end)
+--end
+--
+--function RegularlyAwardInfoView:CloseView(callback)
+--    Facade.SendNotification(NotifyName.CloseUI,this)
+--end
+--
+--function RegularlyAwardInfoView:Awake(obj)
+--    self:on_init()
+--end
+--
+--function RegularlyAwardInfoView:OnEnable()
+--    Facade.RegisterView(self)
+--    self:UpDataInfo()
+--    self:BuildFsm()
+--    self._fsm:GetCurState():PlayEnter(self._fsm)
+--
+--    UISound.play("common_popup")
+--end
+--
+--function RegularlyAwardInfoView:PlayEnter()
+--    AnimatorPlayHelper.Play(this.anima,"RegularlyAwardInfoViewenter",false,function()
+--        self._fsm:GetCurState():FinishEnter(self._fsm)
+--        Event.AddListener(EventName.Event_UpdateItems,self.OnCityInfoChange,self)
+--    end)
+--end
+--
+--function RegularlyAwardInfoView:OnCityInfoChange()
+--    self:UpDataInfo()
+--end
+--
+--function RegularlyAwardInfoView:IsAbleWatchAd()
+--    self:SetEventType()
+--    return _watchADUtility:IsAbleWatchAd(self.eventType)
+--end
+--
+--
+--local function  OpenAds()
+--    local bg1 = fun.find_child(this.btn_watchVideo, "lButtonPurple")
+--    local img = fun.get_component(bg1, fun.IMAGE)
+--    Cache.SetImageSprite("RegularlyAwardAtlas", "lButtonPurple", img)
+--    img.type = UnityEngine.UI.Image.Type.Sliced
+--
+--    local bg2 = fun.find_child(this.btn_watchVideo, "icon_watch_font")
+--    local img = fun.get_component(bg2, fun.IMAGE)
+--    img.enabled = true
+--
+--    local bg3 = fun.find_child(this.btn_watchVideo, "icon_watch_font/icon_watch")
+--    local img3 = fun.get_component(bg3, fun.IMAGE)
+--    fun.set_img_color(img3, Color.New(1, 1, 1, 1))
+--
+--    local img3 = fun.find_child(this.btn_watchVideo, "icon_watch_font/Noads")
+--    if img3 then
+--        fun.set_active(img3, false)
+--    end
+--    local img3 = fun.find_child(this.btn_watchVideo, "icon_watch_font/text_video")
+--    if img3 then
+--        fun.set_active(img3, true)
+--    end
+--    img3 = fun.find_child(this.btn_watchVideo, "root")
+--    if img3 then
+--        fun.set_active(img3, true)
+--    end
+--end
+--
+--
+--local function  SetNoAds()
+--    local bg1 = fun.find_child(this.btn_watchVideo, "lButtonPurple")
+--    local img = fun.get_component(bg1, fun.IMAGE)
+--    Cache.SetImageSprite("CommonAtlas", "lButtonPurpleH", img)
+--    img.type = UnityEngine.UI.Image.Type.Sliced
+--
+--    local bg2 = fun.find_child(this.btn_watchVideo, "icon_watch_font")
+--    local img = fun.get_component(bg2, fun.IMAGE)
+--    img.enabled = false
+--
+--    local bg3 = fun.find_child(this.btn_watchVideo, "icon_watch_font/icon_watch")
+--    local img3 = fun.get_component(bg3, fun.IMAGE)
+--    fun.set_img_color(img3, Color.New(0.47, 0.47, 0.47, 1))
+--
+--    local img3 = fun.find_child(this.btn_watchVideo, "icon_watch_font/Noads")
+--    if img3 then
+--        fun.set_active(img3, true)
+--    end
+--    local img3 = fun.find_child(this.btn_watchVideo, "icon_watch_font/text_video")
+--    if img3 then
+--        fun.set_active(img3, false)
+--    end
+--    img3 = fun.find_child(this.btn_watchVideo, "root")
+--    if img3 then
+--        fun.set_active(img3, false)
+--    end
+--end
+--
+--
+--function RegularlyAwardInfoView:UpDataInfo()
+--    local information =  ModelList.PlayerInfoModel:GetUserInfo()
+--    Cache.SetImageSprite("HeadAtlas",ModelList.PlayerInfoModel:GetHeadIcon(),self.icon_head)
+--    self.text_level.text = information.level
+--    local offline_reward = Csv.GetData("level",information.level,"offline_reward")
+--    self.text_curBonus.text = fun.formatNum(offline_reward[2])
+--    local offline_reward_next = Csv.GetData("level",information.level + 1,"offline_reward") or offline_reward
+--    self.text_nextBonus.text = fun.formatNum(offline_reward_next[2])
+--
+--    local vip = Csv.GetData("vip",information.vip,nil)
+--    Cache.SetImageSprite("VipAtlas", vip.icon, self.img_vip_cion)
+--    self.text_viplevel.text = string.format("LEVEL%s",information.vip)
+--    self.text_extra_gold.text = string.format("+%s%s",(vip.reward_interval - 100),"%")
+--    self.text_extra_diamon.text = string.format("+%s%s",(vip.reward_interval - 100),"%")
+--
+--    local isBigR = ModelList.regularlyAwardModel:CheckUserTypes()
+--    if isBigR then
+--        fun.set_active(self.icon_watch.transform,false,false)
+--        fun.set_active(self.video_effect.transform,false,false)
+--        fun.set_active(self.icon_gems.transform,true,false)
+--        local cost_info = Csv.GetControlByName("offline_reward_upgrade_pay")
+--        self.text_gems.text = cost_info[1][1]
+--        self.text_append.text = string.format("%s<size=32>%s</size>",cost_info[1][2],"%")
+--    else
+--        local video_more = Csv.GetControlByName("offline_reward_upgrade")
+--        self.text_video.text = string.format("%s%s",video_more[1][1],"%")
+--        local isWatchAd = self:IsAbleWatchAd()
+--        if not isWatchAd then SetNoAds()
+--            self.LoopCheckAdOpen()
+--        end
+--    end
+--end
+--
+--function RegularlyAwardInfoView:StopLuaTimer()
+--    if self.LoopCheckAd then
+--        LuaTimer:Remove(self.LoopCheckAd)
+--        self.LoopCheckAd = nil
+--    end
+--end
+--
+--function RegularlyAwardInfoView:LoopCheckAdOpen()
+--    this:StopLuaTimer()
+--    this.LoopCheckAd = LuaTimer:SetDelayLoopFunction(1, 1, 100, function()
+--        local isWatchAd = this:IsAbleWatchAd()
+--        if isWatchAd then
+--            this:StopLuaTimer()
+--        end
+--        end,function ()
+--        local isWatchAd = this:IsAbleWatchAd()
+--        if isWatchAd then
+--            OpenAds()
+--        end
+--    end,nil,LuaTimer.TimerType.UI)
+--end
+--
+--function RegularlyAwardInfoView:BuildFsm()
+--    self:DisposeFsm()
+--    self._fsm = Fsm.CreateFsm("RegularlyAwardInfoView",self,{
+--        RegularlyAwardInfoOriginalState:New(),
+--        RegularlyAwardInfoEnterState:New(),
+--        RegularlyAwardInfoExitState:New(),
+--        RegularlyClaimRewardState:New(),
+--        RegularlyAwardWctchVideoState:New()
+--    })
+--    self._fsm:StartFsm("RegularlyAwardInfoOriginalState")
+--end
+--
+--function RegularlyAwardInfoView:DisposeFsm()
+--    if self._fsm then
+--        self._fsm:Dispose()
+--        self._fsm = nil
+--    end
+--end
+--
+--function RegularlyAwardInfoView:OnDisable()
+--    Facade.RemoveView(self)
+--    self:StopLuaTimer()
+--    click_num = nil
+--    self:DisposeFsm()
+--    Event.RemoveListener(EventName.Event_UpdateItems,self.OnCityInfoChange,self)
+--end
+--
+--function RegularlyAwardInfoView:on_close()
+--
+--end
+--
+--function RegularlyAwardInfoView:OnDestroy()
+--
+--end
+--
+--function RegularlyAwardInfoView:on_btn_close_click()
+--    self._fsm:GetCurState():GobackClick(self._fsm)
+--end
+--
+--function RegularlyAwardInfoView:GobackClick()
+--    AnimatorPlayHelper.Play(this.anima,"RegularlyAwardInfoViewexit",false,function()
+--        self:CloseView()
+--        Facade.SendNotification(NotifyName.SceneCity.HomeScene_promotion)
+--    end)
+--end
+--
+--function RegularlyAwardInfoView:on_btn_watchVideo_click()
+--    local watch_video = function()
+--        if self:IsAbleWatchAd() then
+--            self._fsm:GetCurState():WatchVideo(self._fsm,1)
+--        else
+--            --Ad has not prepared yet
+--            UIUtil.show_common_popup(9024, true)
+--        end
+--    end
+--    local isBigR = ModelList.regularlyAwardModel:CheckUserTypes()
+--    if isBigR then
+--        local resourceValue = ModelList.ItemModel.getResourceNumByType(Resource.diamon)
+--        local offline_data = Csv.GetControlByName("offline_reward_upgrade_pay")
+--        if resourceValue >= offline_data[1][1] then
+--            self._fsm:GetCurState():WatchVideo(self._fsm,2)
+--        else
+--            Facade.SendNotification(NotifyName.ShopView.CheckCurrencyAvailable,8008,Resource.diamon,offline_data[1][1],function()
+--
+--            end,function()
+--                if click_num and click_num > 5 then
+--                    --都连续点5次了，弹广告吧，大R也艰难啊
+--                    watch_video()
+--                else
+--                    click_num = (click_num or 0) + 1
+--                end
+--            end,function()
+--                if click_num and click_num > 5 then
+--                    --都连续点5次了，弹广告吧，大R也艰难啊
+--                    watch_video()
+--                else
+--                    click_num = (click_num or 0) + 1
+--                end
+--            end,SHOP_TYPE.SHOP_TYPE_DIAMONDS,nil,CanvasSortingOrderManager.LayerType.TopConsole)
+--        end
+--    else
+--        watch_video()
+--    end
+--end
+--
+--function RegularlyAwardInfoView:WatchVideo()
+--    _watchADUtility:ChangeAdEvent(self.eventType)
+--    _watchADUtility:WatchVideo(self,self.WatchVideoCallback,"dailybonus_morebonus")
+--end
+--
+--function RegularlyAwardInfoView:WatchVideoCallback(isBreak)
+--    if isBreak then
+--        self._fsm:GetCurState():AdBreakOut(self._fsm)
+--    end
+--end
+--
+--function RegularlyAwardInfoView:SetEventType()
+--    local ismature = ModelList.regularlyAwardModel:IsRegularlyAwardMature()
+--    local eventType = AD_EVENTS.AD_EVENTS_OFFLINE_IN_CD
+--    if ismature then
+--        eventType = AD_EVENTS.AD_EVENTS_OFFLINE_NOT_IN_CD
+--    end
+--    self.eventType = eventType
+--end
+--
+--function RegularlyAwardInfoView:on_btn_claim_click()
+--    self._fsm:GetCurState():ClaimRewar(self._fsm,1)
+--end
+--
+--function RegularlyAwardInfoView:ClaimAwards()
+--    if ModelList.regularlyAwardModel:IsRegularlyAwardMature() then
+--        AddLockCountOneStep()
+--        ModelList.regularlyAwardModel:C2S_RequestRegularlyAwardCommit()
+--    else
+--        --Gold coins can be collected after the countdown is over
+--        UIUtil.show_common_popup(7001, true)
+--    end
+--end
+--
+--function RegularlyAwardInfoView:ClaimMoreRwards()
+--    ModelList.regularlyAwardModel.C2S_GetMoreReward()
+--end
+--
+--function RegularlyAwardInfoView.OnCliamRewardRespone()
+--    this._fsm:GetCurState():CliamRewardRespone(this._fsm,true)
+--end
+--
+--function RegularlyAwardInfoView.OnUpdataRegularlyAward()
+--    this._fsm:GetCurState():CliamRewardRespone(this._fsm,true)
+--end
+--
+--function RegularlyAwardInfoView:OnClaimReward(params)
+--    local reward = ModelList.regularlyAwardModel:GetRewardItemId()
+--    local pos = this.btn_claim.transform.position
+--    if params == 2 then
+--        pos = this.btn_watchVideo.transform.position
+--    end
+--    Facade.SendNotification(NotifyName.ShopView.FlyRewardEffcts,pos,reward,function()
+--        Event.Brocast(EventName.Event_currency_change)
+--    end,nil)
+--    this:GobackClick()
+--end
+--
+--this.NotifyList =
+--{
+--    {notifyName = NotifyName.RegularlyAwardInfoView.UpDataRegularlyAwardInfo, func = this.OnUpdataRegularlyAward},
+--    {notifyName = NotifyName.RegularlyAwardInfoView.CliamRewardRespone, func = this.OnCliamRewardRespone}
+--}
+--
+--return this

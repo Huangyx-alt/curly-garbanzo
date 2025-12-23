@@ -1,0 +1,42 @@
+--auto generate by C# editor: Tools/自动生成AssetList.lua脚本
+local AssetList = {}
+local this = AssetList
+------------------asset map,key to assetbundle_name-----------------
+----------------------------Assets\Bundles\Modules------------------------------------------
+this.GiftPackMoleMinerBuffView = "modules/moleminer/inhotmodule/abprefab/giftpackmoleminerbuffview"
+this.MoleMinerBingoView = "modules/moleminer/inhotmodule/abprefab/moleminerbingoview"
+this.MoleMinerHallView = "modules/moleminer/inhotmodule/abprefab/moleminerhallview"
+this.MoleMinerHelpView = "modules/moleminer/inhotmodule/abprefab/moleminerhelpview"
+this.MoleMinerJackpot = "modules/moleminer/inhotmodule/abprefab/moleminerjackpot"
+this.MoleMinerReadyView = "modules/moleminer/inhotmodule/abprefab/moleminerreadyview"
+this.MoleMinerSettleView = "modules/moleminer/inhotmodule/abprefab/moleminersettleview"
+this.Play26HallBackground = "modules/moleminer/inhotmodule/abprefab/play26hallbackground"
+this.play26zhandou = "modules/moleminer/inhotmodule/abprefab/play26zhandou"
+this.FunctionIcon = "modules/moleminer/inhotmodule/abprefab/pass/functionicon"
+this.PassHelperView = "modules/moleminer/inhotmodule/abprefab/pass/passhelperview"
+this.PassPurchaseView = "modules/moleminer/inhotmodule/abprefab/pass/passpurchaseview"
+this.PassReceivedView = "modules/moleminer/inhotmodule/abprefab/pass/passreceivedview"
+this.PassRewardView = "modules/moleminer/inhotmodule/abprefab/pass/passrewardview"
+this.PassShowTipView = "modules/moleminer/inhotmodule/abprefab/pass/passshowtipview"
+this.PassTaskView = "modules/moleminer/inhotmodule/abprefab/pass/passtaskview"
+this.PassView = "modules/moleminer/inhotmodule/abprefab/pass/passview"
+this.Rewarditem = "modules/moleminer/inhotmodule/abprefab/pass/rewarditem"
+this.GoldRushDlpBg = "modules/moleminer/inhotmodule/texture/abtexture/goldrushdlpbg"
+this.GreenLPBG = "modules/moleminer/inhotmodule/texture/abtexture/greenlpbg"
+this.SceneMoleMiner = "modules/moleminer/inhotmodule/scene/scenemoleminer"
+this.MoleMinergetxiaoka = "modules/moleminer/inhotmodule/effect/abprefab/moleminergetxiaoka"
+this.MoleMinerskill1deng = "modules/moleminer/inhotmodule/effect/abprefab/moleminerskill1deng"
+this.MoleMinerskill1dengget = "modules/moleminer/inhotmodule/effect/abprefab/moleminerskill1dengget"
+this.MoleMinerskill2zuantou = "modules/moleminer/inhotmodule/effect/abprefab/moleminerskill2zuantou"
+this.GoldSkillLsq01 = "modules/moleminer/inhotmodule/effect/materials/goldskilllsq01"
+this.GoldSkillLsq01b = "modules/moleminer/inhotmodule/effect/materials/goldskilllsq01b"
+this.GoldSkillLsq01c = "modules/moleminer/inhotmodule/effect/materials/goldskilllsq01c"
+this.GoldSkillLsq01d = "modules/moleminer/inhotmodule/effect/materials/goldskilllsq01d"
+this.GoldSkillZd01 = "modules/moleminer/inhotmodule/effect/materials/goldskillzd01"
+this.object_1007 = "modules/moleminer/inhotmodule/effect/materials/object_1007"
+this.object_3012 = "modules/moleminer/inhotmodule/effect/materials/object_3012"
+this.MoleMinerPassTaskAtlas = "modules/moleminer/inhotmodule/atlas/moleminerpasstaskatlas"
+this.MoleMinerPopupAtlas = "modules/moleminer/inhotmodule/atlas/moleminerpopupatlas"
+this.MoleMinerPurchaseAtlas = "modules/moleminer/inhotmodule/atlas/moleminerpurchaseatlas"
+
+return this

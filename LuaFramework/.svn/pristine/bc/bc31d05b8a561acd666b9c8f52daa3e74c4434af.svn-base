@@ -1,0 +1,20 @@
+这是活动短令牌模块
+
+目录 
+Base  ---  是所有模块基础类实现，在新模块开发时，如果涉及base修改，需要在这里添加log
+
+BasePassDataComponent.lua    用于处理passdata,代码参考bingopassmodel,
+BasePassHelpView.lua         PassHelpView关联View代码
+BasePassIconView.lua
+BasePassItem.lua
+BasePassTaskReward.lua
+BasePassView.lua
+BaseSpinRewardView.lua
+BaseTaskDataComponent.lua
+BaseTaskItem.lua
+BaseTaskView.lua
+GamePlayShortPassPackage.lua
+GamePlayShotPassPackage.lua
+
+
+LeeToleManPass --绿头人短令牌实现
